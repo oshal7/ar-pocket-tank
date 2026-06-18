@@ -6,10 +6,12 @@ import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -73,7 +75,9 @@ class GameActivity : AppCompatActivity() {
     private val requestCameraPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
-        if (granted) tryCreateSession() else finish()
+        if (granted) tryCreateSession() else {
+            showFatalError("Camera permission is required to play in AR.")
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -151,7 +155,7 @@ class GameActivity : AppCompatActivity() {
                 lastFrameNanos = 0L
                 loopHandler.post(loopRunnable)
             } catch (e: CameraNotAvailableException) {
-                finish()
+                showFatalError("Camera is unavailable. Close any other app using the camera and reopen Pocket Tanks AR.")
                 return
             }
         }
@@ -204,20 +208,26 @@ class GameActivity : AppCompatActivity() {
             lastFrameNanos = 0L
             loopHandler.post(loopRunnable)
         } catch (e: UnavailableUserDeclinedInstallationException) {
-            finish()
+            showFatalError("AR mode needs \"Google Play Services for AR\", but its install was declined.")
         } catch (e: UnavailableArcoreNotInstalledException) {
-            finish()
+            showFatalError("\"Google Play Services for AR\" could not be installed on this device.")
         } catch (e: UnavailableApkTooOldException) {
-            finish()
+            showFatalError("\"Google Play Services for AR\" is out of date. Please update it from the Play Store.")
         } catch (e: UnavailableSdkTooOldException) {
-            finish()
+            showFatalError("This app needs a newer Android version to run ARCore.")
         } catch (e: UnavailableDeviceNotCompatibleException) {
-            finish()
+            showFatalError("This device is not supported by ARCore, so AR mode can't run here.")
         } catch (e: CameraNotAvailableException) {
-            finish()
+            showFatalError("Camera is unavailable. Close any other app using the camera and reopen Pocket Tanks AR.")
         } catch (e: Exception) {
-            finish()
+            showFatalError("Could not start AR: ${e.javaClass.simpleName}: ${e.message}")
         }
+    }
+
+    private fun showFatalError(message: String) {
+        Log.e("PocketTanksAR", message)
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        loopHandler.postDelayed({ finish() }, 3500)
     }
 
     private fun refreshUi() {
