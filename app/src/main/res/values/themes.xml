@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.PocketTanksAR" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/charcoal_slate_dark</item>
+        <item name="android:statusBarColor">@color/charcoal_slate_dark</item>
+        <item name="colorPrimary">@color/neon_cyan</item>
+        <item name="colorAccent">@color/neon_magenta</item>
+    </style>
+
+    <style name="Theme.PocketTanksAR.Splash" parent="Theme.PocketTanksAR">
+        <item name="windowNoTitle">true</item>
+    </style>
+</resources>

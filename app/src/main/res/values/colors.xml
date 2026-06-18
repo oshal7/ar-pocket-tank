@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="neon_cyan">#00F3FF</color>
+    <color name="neon_magenta">#FF0055</color>
+    <color name="neon_green">#39FF14</color>
+    <color name="charcoal_slate">#1A1A24</color>
+    <color name="charcoal_slate_dark">#0D0D14</color>
+    <color name="hud_text">#E8FBFF</color>
+    <color name="panel_bg">#CC0D0D14</color>
+</resources>
