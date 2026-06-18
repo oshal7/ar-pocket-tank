@@ -3,6 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+def ciVersionCode = (System.getenv("GITHUB_RUN_NUMBER") ?: "1").toInteger()
+
 android {
     namespace 'com.pockettanks.ar'
     compileSdk 34
@@ -15,7 +17,7 @@ android {
         // version than the last, signed with the same debug key below —
         // together these let installing a new APK update in place instead
         // of requiring an uninstall first.
-        versionCode (System.getenv("GITHUB_RUN_NUMBER") ?: "1").toInteger()
+        versionCode ciVersionCode
         versionName "0.1.0-mvp"
     }
 
