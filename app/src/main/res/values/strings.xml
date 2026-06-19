@@ -20,4 +20,15 @@
     <string name="connecting_waiting">Waiting for opponent to join…</string>
     <string name="connecting_searching">Searching for host…</string>
     <string name="cancel">CANCEL</string>
+    <string name="opponent_turn">OPPONENT TURN</string>
+    <string name="select_device">SELECT DEVICE</string>
+    <string name="select_peer">SELECT PEER</string>
+    <string name="no_devices_found">No paired devices found. Pair the two phones via Bluetooth settings first.</string>
+    <string name="no_peers_found">Searching for nearby phones with WiFi Direct enabled…</string>
+    <string name="enable_bluetooth_hint">Enable Bluetooth and pair with the other phone first</string>
+    <string name="peer_discovery_failed">WiFi Direct peer discovery failed</string>
+    <string name="peer_connect_failed">Could not connect to that peer</string>
+    <string name="permissions_required">Permissions are required for multiplayer</string>
+    <string name="bluetooth_unavailable">Bluetooth is not available on this device</string>
+    <string name="connection_lost">Connection lost</string>
 </resources>

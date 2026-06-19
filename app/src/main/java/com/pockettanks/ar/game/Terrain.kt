@@ -7,12 +7,12 @@ import kotlin.random.Random
  * anchored in local AR-anchor space. X spans [-halfWidth, halfWidth].
  */
 class Terrain(
-    val columns: Int = 40,
-    val halfWidth: Float = 0.35f,
+    override val columns: Int = 40,
+    override val halfWidth: Float = 0.35f,
     val baseHeight: Float = 0.03f,
     val heightScale: Float = 0.18f
-) {
-    val heights = FloatArray(columns + 1)
+) : TerrainSnapshot {
+    override val heights = FloatArray(columns + 1)
 
     init {
         regenerate()

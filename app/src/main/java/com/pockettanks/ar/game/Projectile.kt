@@ -9,14 +9,14 @@ import kotlin.math.sin
  * simulation must react to live wind acceleration and terrain collisions.
  */
 class Projectile(
-    var x: Float,
-    var y: Float,
+    override var x: Float,
+    override var y: Float,
     angleDeg: Float,
     powerPct: Float,
     val weapon: Weapon,
     val firedByPlayer: Boolean,
     maxSpeed: Float = MAX_SPEED
-) {
+) : ShellSnapshot {
     companion object {
         const val GRAVITY = 0.5f
         const val MAX_SPEED = 0.9f
@@ -24,7 +24,7 @@ class Projectile(
 
     var vx: Float
     var vy: Float
-    val trail = ArrayList<FloatArray>()
+    override val trail = ArrayList<FloatArray>()
 
     init {
         val rad = Math.toRadians(angleDeg.toDouble())

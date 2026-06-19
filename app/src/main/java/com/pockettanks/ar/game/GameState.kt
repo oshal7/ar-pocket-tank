@@ -2,26 +2,27 @@ package com.pockettanks.ar.game
 
 import kotlin.random.Random
 
-enum class Phase { PLAYER_AIM, FLYING, AI_THINKING, GAME_OVER }
+enum class Phase { PLAYER_AIM, FLYING, AI_THINKING, AWAITING_REMOTE_FIRE, GAME_OVER }
 
 /**
  * Single source of truth for the match. Mutated exclusively from the UI
- * thread's game loop; the GL renderer only reads these fields each frame to
- * build its draw calls (minor visual tearing on the terrain array during a
- * deform is an acceptable tradeoff for an MVP and avoids lock contention).
+ * thread's game loop. In multiplayer the host owns the only [GameState]
+ * instance in the match; the client never simulates, it only renders
+ * snapshots broadcast by the host (see [com.pockettanks.ar.multiplayer.RenderSnapshot]).
  */
-class GameState {
+class GameState : BattlefieldSnapshot {
 
-    val terrain = Terrain()
-    val player = Tank(x = -terrain.halfWidth + 0.06f, facingRight = true)
-    val ai = Tank(x = terrain.halfWidth - 0.06f, facingRight = false)
+    override val terrain = Terrain()
+    override val player = Tank(x = -terrain.halfWidth + 0.06f, facingRight = true)
+    override val ai = Tank(x = terrain.halfWidth - 0.06f, facingRight = false)
 
     @Volatile var phase: Phase = Phase.PLAYER_AIM
 
     var selectedWeapon: Weapon = Weapon.STANDARD_HE
-    var windAccel: Float = 0f
+    override var windAccel: Float = 0f
+    var isMultiplayer: Boolean = false
 
-    @Volatile var shell: Projectile? = null
+    @Volatile override var shell: Projectile? = null
     var turnIndex: Int = 0
     @Volatile var winnerIsPlayer: Boolean? = null
     var aiThinkTimer: Float = 0f
@@ -50,6 +51,15 @@ class GameState {
         player.angleDeg = angleDeg
         player.powerPct = powerPct
         shell = Projectile(player.muzzleX(), player.muzzleY(), angleDeg, powerPct, selectedWeapon, firedByPlayer = true)
+        phase = Phase.FLYING
+    }
+
+    /** Applies a shot chosen by the remote human player (multiplayer only). */
+    fun fireRemoteShot(angleDeg: Float, powerPct: Float, weapon: Weapon) {
+        if (phase != Phase.AWAITING_REMOTE_FIRE) return
+        ai.angleDeg = angleDeg
+        ai.powerPct = powerPct
+        shell = Projectile(ai.muzzleX(), ai.muzzleY(), angleDeg, powerPct, weapon, firedByPlayer = false)
         phase = Phase.FLYING
     }
 
@@ -120,7 +130,7 @@ class GameState {
         if (s.firedByPlayer) {
             turnIndex++
             rollWind()
-            phase = Phase.AI_THINKING
+            phase = if (isMultiplayer) Phase.AWAITING_REMOTE_FIRE else Phase.AI_THINKING
             aiThinkTimer = 1.1f
         } else {
             rollWind()

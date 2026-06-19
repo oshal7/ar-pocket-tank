@@ -5,12 +5,12 @@ package com.pockettanks.ar.game
  * direction (along +X or -X) the turret's 0deg elevation points toward.
  */
 class Tank(
-    var x: Float,
-    val facingRight: Boolean,
-    var hp: Int = 100
-) {
-    var y: Float = 0f
-    var angleDeg: Float = 45f
+    override var x: Float,
+    override val facingRight: Boolean,
+    override var hp: Int = 100
+) : TankSnapshot {
+    override var y: Float = 0f
+    override var angleDeg: Float = 45f
     var powerPct: Float = 50f
 
     val isAlive: Boolean get() = hp > 0

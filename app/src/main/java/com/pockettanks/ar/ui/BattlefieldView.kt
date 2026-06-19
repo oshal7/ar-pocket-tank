@@ -7,21 +7,24 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
 import android.view.View
-import com.pockettanks.ar.game.GameState
-import com.pockettanks.ar.game.Tank
+import com.pockettanks.ar.game.BattlefieldSnapshot
+import com.pockettanks.ar.game.TankSnapshot
 import kotlin.math.cos
 import kotlin.math.sin
 
 /**
  * Full-screen top-down 2D battlefield: terrain silhouette, both tanks with
  * turret orientation, the live shell and its trail, and a wind indicator.
+ * Renders from a [BattlefieldSnapshot] so the same view draws a live local
+ * [com.pockettanks.ar.game.GameState] (single-player/host) or a network
+ * [com.pockettanks.ar.multiplayer.RenderSnapshot] (multiplayer client).
  */
 class BattlefieldView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
-    var gameState: GameState? = null
+    var snapshot: BattlefieldSnapshot? = null
 
     private val bgPaint = Paint().apply { color = Color.parseColor("#0D0D14") }
     private val terrainStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -69,7 +72,7 @@ class BattlefieldView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        val gs = gameState ?: return
+        val gs = snapshot ?: return
         val w = width.toFloat()
         val h = height.toFloat()
         canvas.drawRect(0f, 0f, w, h, bgPaint)
@@ -118,7 +121,7 @@ class BattlefieldView @JvmOverloads constructor(
 
     private fun drawTank(
         canvas: Canvas,
-        tank: Tank,
+        tank: TankSnapshot,
         vx: Float,
         vy: Float,
         pxPerWorldX: Float,
