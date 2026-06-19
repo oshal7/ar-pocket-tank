@@ -16,6 +16,10 @@ import com.pockettanks.ar.ui.RadialDialView
 
 class GameActivity : AppCompatActivity() {
 
+    companion object {
+        const val EXTRA_GAME_MODE = "game_mode"
+    }
+
     private val gameState = GameState()
     private lateinit var battlefieldView: BattlefieldView
 

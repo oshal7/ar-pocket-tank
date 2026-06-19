@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/charcoal_slate_dark"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="32dp">
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:indeterminateTint="@color/neon_cyan" />
+
+    <TextView
+        android:id="@+id/statusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:gravity="center"
+        android:text="@string/connecting_waiting"
+        android:textColor="@color/hud_text"
+        android:textSize="15sp" />
+
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="180dp"
+        android:layout_height="48dp"
+        android:background="@drawable/btn_outline"
+        android:text="@string/cancel"
+        android:textColor="@color/neon_magenta"
+        android:textStyle="bold" />
+
+</LinearLayout>

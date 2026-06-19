@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Pocket Tanks AR</string>
-    <string name="start_game">START GAME</string>
     <string name="tagline">Tabletop Artillery, Reimagined</string>
     <string name="weapon_he">Standard HE</string>
     <string name="weapon_dirt">Dirt Mover</string>
@@ -11,4 +10,14 @@
     <string name="victory">VICTORY</string>
     <string name="defeat">DEFEAT</string>
     <string name="play_again">PLAY AGAIN</string>
+    <string name="single_player">SINGLE PLAYER</string>
+    <string name="multiplayer">MULTIPLAYER</string>
+    <string name="choose_transport">Choose connection type</string>
+    <string name="bluetooth">BLUETOOTH</string>
+    <string name="wifi_direct">WIFI DIRECT</string>
+    <string name="host_game">HOST GAME</string>
+    <string name="join_game">JOIN GAME</string>
+    <string name="connecting_waiting">Waiting for opponent to join…</string>
+    <string name="connecting_searching">Searching for host…</string>
+    <string name="cancel">CANCEL</string>
 </resources>
