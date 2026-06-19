@@ -1,5 +1,6 @@
 package com.pockettanks.ar
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -86,7 +87,7 @@ class ConnectingActivity : AppCompatActivity() {
             failAndFinish(getString(R.string.bluetooth_unavailable))
             return
         }
-        @Suppress("MissingPermission")
+        @SuppressLint("MissingPermission")
         val remoteDevice = intent.getStringExtra(EXTRA_DEVICE_ADDRESS)?.let { address ->
             adapter.bondedDevices.firstOrNull { it.address == address }
         }
