@@ -1,9 +1,8 @@
 package com.pockettanks.ar.game
 
-import com.google.ar.core.Anchor
 import kotlin.random.Random
 
-enum class Phase { SCANNING, PLAYER_AIM, FLYING, AI_THINKING, GAME_OVER }
+enum class Phase { PLAYER_AIM, FLYING, AI_THINKING, GAME_OVER }
 
 /**
  * Single source of truth for the match. Mutated exclusively from the UI
@@ -17,9 +16,7 @@ class GameState {
     val player = Tank(x = -terrain.halfWidth + 0.06f, facingRight = true)
     val ai = Tank(x = terrain.halfWidth - 0.06f, facingRight = false)
 
-    @Volatile var phase: Phase = Phase.SCANNING
-    @Volatile var anchorPlaced: Boolean = false
-    @Volatile var anchor: Anchor? = null
+    @Volatile var phase: Phase = Phase.PLAYER_AIM
 
     var selectedWeapon: Weapon = Weapon.STANDARD_HE
     var windAccel: Float = 0f
@@ -44,8 +41,7 @@ class GameState {
         windAccel = (Random.nextFloat() - 0.5f) * 0.24f
     }
 
-    fun onAnchorPlaced() {
-        anchorPlaced = true
+    fun startMatch() {
         phase = Phase.PLAYER_AIM
     }
 

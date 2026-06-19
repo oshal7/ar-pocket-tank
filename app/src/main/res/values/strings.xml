@@ -3,7 +3,6 @@
     <string name="app_name">Pocket Tanks AR</string>
     <string name="start_game">START GAME</string>
     <string name="tagline">Tabletop Artillery, Reimagined</string>
-    <string name="scanning_hint">Move your device slowly over a flat table or floor…</string>
     <string name="weapon_he">Standard HE</string>
     <string name="weapon_dirt">Dirt Mover</string>
     <string name="fire">FIRE</string>

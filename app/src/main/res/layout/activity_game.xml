@@ -4,32 +4,10 @@
     android:layout_height="match_parent"
     android:background="@color/charcoal_slate_dark">
 
-    <android.opengl.GLSurfaceView
-        android:id="@+id/glSurfaceView"
+    <com.pockettanks.ar.ui.BattlefieldView
+        android:id="@+id/battlefieldView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <!-- Calibration overlay -->
-    <LinearLayout
-        android:id="@+id/calibrationOverlay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="24dp">
-
-        <TextView
-            android:id="@+id/scanHintText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_panel"
-            android:padding="16dp"
-            android:text="@string/scanning_hint"
-            android:textColor="@color/hud_text"
-            android:textSize="16sp"
-            android:gravity="center" />
-    </LinearLayout>
 
     <!-- Top-center HUD -->
     <LinearLayout
@@ -41,8 +19,7 @@
         android:orientation="vertical"
         android:gravity="center"
         android:background="@drawable/bg_panel"
-        android:padding="10dp"
-        android:visibility="invisible">
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/turnText"
@@ -62,15 +39,6 @@
             android:textSize="12sp"
             android:text="YOU 100  |  AI 100" />
     </LinearLayout>
-
-    <!-- Radar PiP top-right -->
-    <com.pockettanks.ar.ui.RadarView
-        android:id="@+id/radarView"
-        android:layout_width="140dp"
-        android:layout_height="100dp"
-        android:layout_gravity="top|end"
-        android:layout_margin="16dp"
-        android:visibility="invisible" />
 
     <!-- Bottom-left radial dial (angle) -->
     <LinearLayout
