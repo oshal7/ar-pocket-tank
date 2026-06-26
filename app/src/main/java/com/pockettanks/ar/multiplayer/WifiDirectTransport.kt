@@ -39,14 +39,22 @@ class WifiDirectTransport(
             return
         }
         Thread {
-            try {
-                val sock = Socket()
-                sock.connect(InetSocketAddress(address, PORT), 15000)
-                socket = sock
-                beginSession(sock.inputStream, sock.outputStream)
-            } catch (e: Exception) {
-                onError?.invoke(e.message ?: "WiFi Direct connect failed")
+            var lastError: Exception? = null
+            for (attempt in 1..CONNECT_ATTEMPTS) {
+                try {
+                    val sock = Socket()
+                    sock.connect(InetSocketAddress(address, PORT), CONNECT_TIMEOUT_MS)
+                    socket = sock
+                    beginSession(sock.inputStream, sock.outputStream)
+                    return@Thread
+                } catch (e: Exception) {
+                    lastError = e
+                    // The host may not have opened its ServerSocket yet right after WiFi
+                    // Direct's group-owner negotiation completes - retry instead of failing fast.
+                    try { Thread.sleep(RETRY_DELAY_MS) } catch (_: InterruptedException) { return@Thread }
+                }
             }
+            onError?.invoke(lastError?.message ?: "WiFi Direct connect failed")
         }.also { it.isDaemon = true; it.start() }
     }
 
@@ -58,5 +66,8 @@ class WifiDirectTransport(
 
     companion object {
         private const val PORT = 8988
+        private const val CONNECT_ATTEMPTS = 8
+        private const val CONNECT_TIMEOUT_MS = 3000
+        private const val RETRY_DELAY_MS = 1000L
     }
 }

@@ -43,15 +43,25 @@ class BluetoothTransport(
             return
         }
         Thread {
-            try {
-                adapter.cancelDiscovery()
-                val sock = device.createRfcommSocketToServiceRecord(APP_UUID)
-                sock.connect()
-                socket = sock
-                beginSession(sock.inputStream, sock.outputStream)
-            } catch (e: Exception) {
-                onError?.invoke(e.message ?: "Bluetooth connect failed")
+            adapter.cancelDiscovery()
+            var lastError: Exception? = null
+            for (attempt in 1..CONNECT_ATTEMPTS) {
+                var sock: BluetoothSocket? = null
+                try {
+                    sock = device.createRfcommSocketToServiceRecord(APP_UUID)
+                    sock.connect()
+                    socket = sock
+                    beginSession(sock.inputStream, sock.outputStream)
+                    return@Thread
+                } catch (e: Exception) {
+                    lastError = e
+                    try { sock?.close() } catch (_: Exception) {}
+                    // The other phone may not have started listenUsingRfcommWithServiceRecord
+                    // yet if "Host" and "Join" weren't tapped at the same instant - retry.
+                    try { Thread.sleep(RETRY_DELAY_MS) } catch (_: InterruptedException) { return@Thread }
+                }
             }
+            onError?.invoke(lastError?.message ?: "Bluetooth connect failed")
         }.also { it.isDaemon = true; it.start() }
     }
 
@@ -64,5 +74,7 @@ class BluetoothTransport(
     companion object {
         private const val SERVICE_NAME = "PocketTanksAR"
         private val APP_UUID: UUID = UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66")
+        private const val CONNECT_ATTEMPTS = 6
+        private const val RETRY_DELAY_MS = 1500L
     }
 }
